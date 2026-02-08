@@ -49,4 +49,4 @@ Navigate to `http://localhost:8080/` in a WebGPU-enabled browser (Chrome/Edge 11
 - `static/style.css`: Premium dark mode UI.
 
 ## License
-MIT
+GNU General Public License v3.0
