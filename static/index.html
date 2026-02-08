@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Distributed LLM Node</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="tokenizer.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+        <header class="topbar">
+            <div class="brand">
+                <div class="title">Distributed LLM Node</div>
+                <div class="subtitle">WebGPU client + sparse gradient sync</div>
+            </div>
+
+            <div class="top-actions">
+                <div class="pill">
+                    <span class="dot" id="status-dot"></span>
+                    <span id="status-text">Disconnected</span>
+                </div>
+                <button id="connect-btn" class="btn primary">
+                    Connect
+                </button>
+            </div>
+        </header>
+
+        <main class="grid">
+            <section class="card">
+                <h2>Connection</h2>
+
+                <div class="row">
+                    <div class="label">API URL</div>
+                    <div class="value grow">
+                        <input id="api-url" type="text" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Node ID</div>
+                    <div class="value mono" id="node-id">-</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">WebGPU</div>
+                    <div class="value" id="gpu-status">Checking…</div>
+                </div>
+
+                <div class="hr"></div>
+
+                <div class="row">
+                    <div class="label">Grad Mode</div>
+                    <div class="value">
+                        <label class="radio-label"><input type="radio" name="grad-mode" value="1" checked /> S1</label>
+                        <label class="radio-label"><input type="radio" name="grad-mode" value="2" /> S2</label>
+                        <label class="radio-label"><input type="radio" name="grad-mode" value="3" /> D3</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Server step</div>
+                    <div class="value mono" id="server-step">-</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Server updates</div>
+                    <div class="value mono" id="server-updates">-</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Total params</div>
+                    <div class="value mono" id="total-params">-</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Tensors</div>
+                    <div class="value mono" id="tensor-count">-</div>
+                </div>
+
+                <div class="row">
+                    <button id="download-btn" class="btn" disabled>
+                        Download full model (f16)
+                    </button>
+                    <div class="value mono" id="download-progress">-</div>
+                </div>
+
+                <div class="row">
+                    <button id="sync-btn" class="btn" disabled>
+                        Sync (sample tensor slice)
+                    </button>
+                    <button id="manifest-btn" class="btn" disabled>
+                        View manifest (log)
+                    </button>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Training</h2>
+
+                <div class="row">
+                    <div class="label">Local step</div>
+                    <div class="value mono" id="local-step">0</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Upload target</div>
+                    <div class="value mono" id="upload-target">
+                        500 KB/s
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Throughput</div>
+                    <div class="value mono" id="throughput">-</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Sparsity</div>
+                    <div class="value mono" id="sparsity">-</div>
+                </div>
+
+                <div class="row">
+                    <div class="label">Thread</div>
+                    <div class="value">
+                        <label class="radio-label"><input type="radio" name="train-thread" value="ui" checked />
+                            UI</label>
+                        <label class="radio-label"><input type="radio" name="train-thread" value="worker" />
+                            Worker</label>
+                    </div>
+                </div>
+
+                <div class="hr"></div>
+
+                <label class="small">Training text</label>
+                <textarea id="training-text"
+                    placeholder="Paste some text here. (This demo uses mock training but syncs real packets.)"></textarea>
+
+                <div class="row">
+                    <button id="train-btn" class="btn secondary" disabled>
+                        Start training
+                    </button>
+                    <button id="save-btn" class="btn" disabled>
+                        Save local
+                    </button>
+                    <button id="load-btn" class="btn" disabled>
+                        Load local
+                    </button>
+                </div>
+            </section>
+
+            <section class="card wide">
+                <h2>Metrics</h2>
+                <div class="chartWrap">
+                    <canvas id="lossChart"></canvas>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Local chat (stub)</h2>
+                <div id="chat" class="chat"></div>
+                <div class="chatRow">
+                    <input id="chat-input" type="text" placeholder="Type something…" />
+                    <button id="chat-send" class="btn">
+                        Send
+                    </button>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Log</h2>
+                <div id="log" class="log"></div>
+                <div class="row">
+                    <button id="clear-log" class="btn">
+                        Clear
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

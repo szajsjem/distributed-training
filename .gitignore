@@ -1,0 +1,28 @@
+# Build artifacts
+build/
+bin/
+out/
+*.o
+*.obj
+*.exe
+*.pdb
+*.ilk
+
+# Training artifacts
+checkpoints/
+
+# IDE files
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln
+*.vcxproj
+*.filters
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Nested git clones (from accidental clones)
+distributed-training/
